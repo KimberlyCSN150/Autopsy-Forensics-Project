@@ -1,235 +1,197 @@
-# 🔍 Digital Forensics Investigation Lab Using Autopsy
-**CSN 150 | Final Project | Spring 2026**
+# Digital Forensics Investigation Lab Using Autopsy
+
+**CSN 150 | Spring 2026**
 **Student:** Kimberly Martinez
 **Professor:** Reed-Sanchez
 
 ---
 
-## 📌 Project Overview
+## What This Project Is
 
-This project demonstrates a structured digital forensics investigation using **Autopsy**, a free and open-source forensic platform trusted by law enforcement agencies, incident responders, and cybersecurity professionals worldwide.
+For my final project I used **Autopsy** and **FTK Imager** to investigate a forensic disk image from a suspected insider threat. The image came from the **Hunter** challenge on CyberDefenders — a free blue team forensics lab.
 
-For this lab, I used the **Hunter** challenge from [CyberDefenders](https://cyberdefenders.org) — a beginner-friendly blue team CTF that provides a real forensic disk image to investigate. The goal was to analyze the image, recover artifacts, and answer key investigative questions using Autopsy's built-in analysis tools.
-
-### What is Autopsy?
-Autopsy is a graphical interface built on top of **The Sleuth Kit (TSK)**, a collection of command-line forensic tools. It allows investigators to:
-- Examine disk images without altering the original evidence
-- Recover deleted files and hidden data
-- Analyze browser history, downloads, and user activity
-- Search for keywords and flag known malicious files
-- Build timelines of system events
-
-### Why This Project Matters
-In the real world, digital forensics is a critical part of incident response. When a system is compromised, attackers often try to delete files or clear logs to cover their tracks. Autopsy gives investigators the ability to recover that data and reconstruct exactly what happened — which can be essential for legal proceedings, insurance claims, and preventing future attacks.
+The investigation uncovered evidence of network scanning, data exfiltration, Skype communication with an external attacker, file shredding, and use of Tor Browser to hide activity.
 
 ---
 
-## 🛠️ Tools & Resources
+## Tools Used
 
-| Resource | Link |
-|----------|------|
-| Autopsy Official Site | https://www.sleuthkit.org/autopsy/ |
-| Autopsy Documentation | https://www.sleuthkit.org/autopsy/docs.php |
-| The Sleuth Kit GitHub | https://github.com/sleuthkit/autopsy |
-| CyberDefenders (Hunter Lab) | https://cyberdefenders.org |
-| BlueTeamLabs Online | https://blueteamlabs.online |
-| Digital Corpora (Practice Images) | https://digitalcorpora.org |
+| Tool | Purpose | Download |
+|------|---------|----------|
+| Autopsy 4.21.0 | Main forensic analysis tool | https://github.com/sleuthkit/autopsy/releases/tag/autopsy-4.21.0 |
+| FTK Imager | Used to open the AD1 disk image | https://www.exterro.com/ftk-product-suite/ftk-imager |
+| CyberDefenders | Source of the Hunter lab image | https://cyberdefenders.org |
 
----
-
-## 💻 System Requirements
-
-| Component | Minimum | Recommended |
-|-----------|---------|-------------|
-| OS | Windows 10 | Windows 10/11 64-bit |
-| RAM | 8 GB | 16 GB |
-| Storage | 50 GB free | 100 GB free (SSD preferred) |
-| Java | Included in installer | — |
-
-> **Note:** Autopsy is most stable on Windows. Running it on an SSD significantly reduces processing time during ingest.
+> ⚠️ **Use Autopsy 4.21.0 — not 4.23.0.** The latest version freezes on Windows during startup. See the Troubleshooting section for details.
 
 ---
 
-## 📥 Installation Instructions
+## How to Set This Up
 
-### Step 1 — Download Autopsy
-1. Go to https://www.sleuthkit.org/autopsy/
-2. Click **"Download"** and select the latest **Windows 64-bit** installer
-3. The file will be named something like `autopsy-4.21.0-64bit.msi`
+### 1. Install Autopsy 4.21.0
+- Download `autopsy-4.21.0-64bit.msi` from the link above
+- Right-click → Run as Administrator
+- Use default installation settings
 
-### Step 2 — Run the Installer
-1. Double-click the `.msi` file to launch the installer
-2. Accept the license agreement
-3. Leave the default installation directory as-is
-4. Click **Install** and wait for it to complete (this takes a few minutes)
-5. Click **Finish** — do **not** launch Autopsy yet
+### 2. Install FTK Imager
+- Download and install from the link above
+- Run as Administrator
 
-### Step 3 — Get the Hunter Lab Disk Image
-1. Go to [cyberdefenders.org](https://cyberdefenders.org) and create a free account
-2. Navigate to **Labs** → filter by **Forensics** and **Easy**
-3. Search for and open the **Hunter** lab
-4. Click **Download** to get the challenge zip file
-5. Once downloaded, **right-click → Extract All** to unzip
-6. Inside you will find the disk image file (`.E01` or `.dd` format)
+### 3. Get the Hunter Lab Image
+- Create a free account at cyberdefenders.org
+- Search for the **Hunter** lab and download the zip file
+- The zip is password protected — use the password: `cyberdefenders.org`
+- After extracting you will have two files:
+  - `Hunter` — the actual disk image (621,327 KB) — this is what you need
+  - `Hunter.ad1` — a small text file (3 KB) — ignore this one
 
 ---
 
-## ⚙️ Configuration & Setup
+## How I Ran the Investigation
 
-### Step 1 — Launch Autopsy & Create a New Case
-1. Open Autopsy from your Start menu
-2. Wait for the splash screen to finish loading
-3. Click **"New Case"**
-4. Fill in the following:
-   - **Case Name:** `Hunter-Forensics-Lab`
-   - **Base Directory:** choose a folder with plenty of storage
-5. Click **Next**
-6. Enter your name in the **Examiner** field
-7. Click **Finish**
+### Step 1 — Open the image in FTK Imager
+Autopsy cannot open AD1 files directly, so I used FTK Imager to extract the contents first.
 
-### Step 2 — Add the Disk Image as a Data Source
-1. When prompted to add a data source, select **"Disk Image or VM File"**
-2. Click **Next**
-3. Click **Browse** and navigate to your unzipped Hunter lab image
-4. Select the `.E01` or `.dd` file
-5. Leave the time zone at default unless the lab specifies otherwise
-6. Click **Next**
+1. Open FTK Imager → File → Add Evidence Item → Image File
+2. Browse to and select the Hunter file (621,327 KB)
+3. Expand: `Hunter.ad1 → Custom Content Image → c16-Hunter:NONAME [NTFS] → [root]`
+4. Right-click `[root]` → Export Files → save to a folder called `Hunter-Exported` on your Desktop
+5. Wait for export to finish (662 folders, 6,660 files exported)
 
-### Step 3 — Select Ingest Modules
-When the ingest module screen appears, make sure the following are checked:
+![FTK Imager loaded]
+<img width="571" height="731" alt="Screenshot 2026-05-19 171442" src="https://github.com/user-attachments/assets/8fc9dd15-4cc3-430f-b44f-ed6d5ebea300" />
 
-| Module | Purpose |
-|--------|---------|
-| ✅ File Type Identification | Identifies files by content, not just extension |
-| ✅ Recent Activity | Recovers browser history, downloads, searches |
-| ✅ Keyword Search | Allows searching for specific terms across the image |
-| ✅ Hash Lookup | Flags known malicious files using hash databases |
-| ✅ Extension Mismatch Detector | Catches files that have been renamed to hide their type |
 
-Click **Finish** — Autopsy will begin processing. This typically takes **15–45 minutes** depending on image size and your hardware.
+![File system expanded]<img width="575" height="731" alt="Autopsy Forensics 5" src="https://github.com/user-attachments/assets/516c1942-e1ab-46df-b10b-2aa5366ea517" />
 
-### Step 4 — Analyze the Results
-Once ingest is complete, use the left panel to explore:
+![Export complete]<img width="412" height="237" alt="Screenshot 2026-05-19 171804" src="https://github.com/user-attachments/assets/b641dc65-e521-4f7a-8582-3fadbccc2586" />
 
-- **Data Sources** → browse the full file system
-- **Views → File Types** → filter by images, documents, executables, etc.
-- **Results → Extracted Content → Web History** → browser activity
-- **Results → Extracted Content → Recent Documents** → recently opened files
-- **Results → Keyword Hits** → anything flagged by your keyword search
-- **Timeline** (Tools menu) → chronological view of all system events
+### Step 2 — Create a case in Autopsy
+1. Open Autopsy → click New Case
+2. Case Name: `Hunter-Forensics-Lab`
+3. Click Next → enter your name → Finish
 
-### Step 5 — Generate a Report
-1. Go to **Tools → Generate Report**
-2. Select **HTML Report** for easy viewing
-3. Click **Next → Finish**
-4. Autopsy will save the report in your case folder — open `index.html` in a browser to view it
+![Autopsy welcome screen]<img width="1042" height="663" alt="Screenshot 2026-05-19 160655" src="https://github.com/user-attachments/assets/67e643b8-5abd-48a1-ad87-ec0ec50f39fd" />
+
+### Step 3 — Add the exported folder as a data source
+1. Select **Logical Files** as the data source type
+2. Browse to your `Hunter-Exported/[root]` folder
+3. Click Next
+
+### Step 4 — Select ingest modules
+Only enable these five:
+
+- Recent Activity
+- Hash Lookup
+- File Type Identification
+- Extension Mismatch Detector
+- Keyword Search
+
+![Ingest modules]<img width="848" height="451" alt="Screenshot 2026-05-19 161850" src="https://github.com/user-attachments/assets/2e74ba4f-d557-4efe-a282-4148a4029cf6" />
+
+### Step 5 — Wait for processing and explore results
+Once ingest finishes, the left panel will populate with all the artifacts.
+
+![Autopsy results loaded]<img width="764" height="724" alt="Screenshot 2026-05-19 172018" src="https://github.com/user-attachments/assets/6356ec50-f0d8-44dd-83f5-0533140e2f41" />
 
 ---
 
-## 🖼️ Screenshots & Diagrams
+## What I Found — All 30 Questions Answered
 
-### Autopsy Splash Screen (Loading)
-> *Screenshot: Autopsy launching for the first time showing the splash screen and loading bar*
-
-![Autopsy Splash Screen](screenshots/autopsy-splash.png)
-
-### New Case Setup
-> *Screenshot: Case name and base directory configuration screen*
-
-![New Case](screenshots/new-case-setup.png)
-
-### Ingest Modules Selected
-> *Screenshot: Ingest module selection screen with recommended modules checked*
-
-![Ingest Modules](screenshots/ingest-modules.png)
-
-### Autopsy Processing the Image
-> *Screenshot: Autopsy running ingest with progress bar visible at the bottom*
-
-![Processing](screenshots/autopsy-processing.png)
-
-### Investigation Results
-> *Screenshot: Left panel showing recovered artifacts, file tree, and keyword hits*
-
-![Results](screenshots/investigation-results.png)
-
-### Generated Report
-> *Screenshot: HTML report exported from Autopsy showing findings summary*
-
-![Report](screenshots/autopsy-report.png)
-
----
-
-## 🧩 Forensic Investigation Workflow
-
-```
-Disk Image (.E01 / .dd)
-        │
-        ▼
-  Open in Autopsy
-        │
-        ▼
-  Run Ingest Modules
-  ┌─────────────────────────────┐
-  │ File Type ID                │
-  │ Recent Activity             │
-  │ Keyword Search              │
-  │ Hash Lookup                 │
-  │ Extension Mismatch Detector │
-  └─────────────────────────────┘
-        │
-        ▼
-  Analyze Artifacts
-  ┌──────────────────────┐
-  │ Deleted Files        │
-  │ Browser History      │
-  │ Recent Documents     │
-  │ Keyword Hits         │
-  │ Timeline Events      │
-  └──────────────────────┘
-        │
-        ▼
-  Generate Report
-```
+| # | Question | Answer | Found In |
+|---|----------|--------|----------|
+| 1 | Computer name | 4ORENSICS | OS Information |
+| 2 | Computer IP | 10.0.2.15 | OS Information |
+| 3 | DHCP LeaseObtainedTime | 21/06/2016 02:24:12 UTC | OS Information |
+| 4 | Computer SID | S-1-5-21-2489440558-2754304563-710705792 | OS Accounts |
+| 5 | OS version | 8.1 (Windows 8.1 Enterprise) | OS Information |
+| 6 | Timezone | UTC-07:00 | OS Information |
+| 7 | Login count | 3 | OS Accounts → Hunter row |
+| 8 | Last login time | 2016-06-21 01:42 | OS Accounts → Hunter row |
+| 9 | Network scanner & last used | zenmap.exe, 2016-06-21 12:08:13 UTC | Run Programs |
+| 10 | Port scan end time | Tue Jun 21 05:12:09 2016 | Zenmap scan log |
+| 11 | Ports scanned | 1000 | Zenmap scan log |
+| 12 | Open ports | 22, 80, 9929, 31337 | Zenmap scan log |
+| 13 | Scanner version | 7.12 | Installed Programs |
+| 14 | Skype username (other party) | linux-rul3z | Skype database |
+| 15 | Agreed exfiltration app | TeamViewer | Skype conversation |
+| 16 | Suspect Gmail | ehptmsgs@gmail.com | Email Addresses |
+| 17 | Deleted diagram filename | home-network-design-networking-for-a-single-family-home-case-house-arkko-1433-x-792.jpg | Deleted Files |
+| 18 | PDF in Documents | Ryan_VanAntwerp_thesis.pdf | Recent Documents |
+| 19 | Disk encryption app | Crypto Swap | Installed Programs |
+| 20 | USB serial numbers | 07B20C03C80830A9, AAI6UXDKZDV8E9OU | USB Device Attached |
+| 21 | File shredder app | Jetico BCWipe | Installed Programs |
+| 22 | Prefetch files found | 174 | Run Programs |
+| 23 | Times shredder executed | 5 | Run Programs → BCWIPE entries |
+| 24 | Last Zenmap execution | 06/21/2016 12:08:13 PM | Run Programs → ZENMAP.EXE prefetch |
+| 25 | Burp Suite JAR path | C:\Users\Hunter\Downloads\burpsuite_free_v1.7.03.jar | Recent Documents |
+| 26 | Email attachment name | Pictures.7z | Email artifacts |
+| 27 | Exfil folder path | C:\Users\Hunter\Pictures\Exfil | Shell Bags |
+| 28 | Deleted JPG (1920x1200) | ws_Small_cute_kitty_1920x1200.jpg | Deleted Files |
+| 29 | Jump lists directory | AutomaticDestinations | AppData\Roaming\Microsoft\Windows\Recent |
+| 30 | Tor Browser path | C:\Users\Hunter\Desktop\Tor Browser\Browser\firefox.exe | Jump Lists |
 
 ---
 
-## ⚠️ Troubleshooting Notes & Challenges
+## Investigation Screenshots
 
-### Challenge 1 — Autopsy Takes a Long Time to Load
-**Issue:** The splash screen appears frozen on first launch.
-**Solution:** This is normal behavior. Autopsy loads all its modules in the background before showing the main interface. Wait 2–5 minutes without clicking anything. Do not force close it.
+![OS Accounts]<img width="773" height="728" alt="Screenshot 2026-05-19 172712" src="https://github.com/user-attachments/assets/0764ce1b-8708-427c-b9af-0dda3d9af136" />
+*OS Accounts — suspect user Hunter, 3 logins, last login 2016-06-20*
 
-### Challenge 2 — Ingest Takes Longer Than Expected
-**Issue:** Processing the disk image runs for 30+ minutes.
-**Solution:** This is also normal, especially on a mechanical hard drive or with limited RAM. Keep Autopsy as the active application and close other programs to free up memory. Running the image from an SSD significantly speeds things up.
+![OS Information]<img width="773" height="728" alt="Screenshot 2026-05-19 172728" src="https://github.com/user-attachments/assets/a4d914bd-832f-4dae-b6cc-ffb47cb85a5d" />
+*Operating System Information — computer name 4ORENSICS, Windows 8.1 Enterprise*
 
-### Challenge 3 — Can't Find the Disk Image File After Unzipping
-**Issue:** After unzipping the Hunter lab download, the image file isn't visible.
-**Solution:** The `.E01` file may be inside a subfolder within the zip. Open the unzipped folder and look inside any subfolders. Also make sure Windows is showing file extensions (View → Show → File name extensions).
+![Recent Documents]<img width="770" height="730" alt="Screenshot 2026-05-19 172134" src="https://github.com/user-attachments/assets/da24069f-fb8d-47ee-8b48-9e3667b18d01" />
+*Recent Documents — Burp Suite JAR, exfiltration diagram, and staged files*
 
-### Challenge 4 — Learning Which Artifacts to Look For
-**Issue:** Autopsy surfaces a lot of data and it's unclear where to start.
-**Solution:** Read the Hunter lab questions on CyberDefenders first. Each question points you toward a specific artifact type (e.g., "What website was visited?" → check Web History; "What file was downloaded?" → check Downloads). Use the questions as a roadmap.
+![USB Devices]<img width="770" height="718" alt="Screenshot 2026-05-19 172147" src="https://github.com/user-attachments/assets/176caa7d-87c0-40f7-8427-b422a13c1fe5" />
+*USB Device Attached — two storage drives identified*
 
-### Challenge 5 — Understanding Forensic File Formats
-**Issue:** Unfamiliar with `.E01` vs `.dd` image formats.
-**Solution:** Both are forensic disk image formats that Autopsy supports natively. `.E01` (EnCase format) is more common in professional forensics and includes metadata and checksums. `.dd` is a raw bit-for-bit copy. Either will work the same way in Autopsy.
+![Shell Bags]<img width="767" height="731" alt="Screenshot 2026-05-19 172159" src="https://github.com/user-attachments/assets/62999271-a42d-4d24-82bb-3999c82394dc" />
+*Shell Bags — suspect browsed to the Exfil staging folder*
 
-### Challenge 6 — Hardware Resource Constraints
-**Issue:** Computer slows down significantly during ingest.
-**Solution:** Close all browser tabs and background applications before starting ingest. If the computer has less than 8GB of RAM, consider using a smaller practice image first.
+![Web History]<img width="770" height="728" alt="Screenshot 2026-05-19 172323" src="https://github.com/user-attachments/assets/8e42c720-d7b6-4d02-92c3-6db6fad2311b" />
+*Web History — Skype session and local exfil file access*
 
----
+![Installed Programs]<img width="772" height="730" alt="Screenshot 2026-05-19 172350" src="https://github.com/user-attachments/assets/b94e8e4e-d55c-4bda-87b2-7dba9e8b5bf2" />
+*Installed Programs — BCWipe, Crypto Swap, Zenmap 7.12*
 
-## 📝 Key Takeaways
-
-- Digital forensics is not just about finding files — it's about **telling a story** of what happened on a system, in what order, and by whom.
-- Autopsy's **ingest modules** do the heavy lifting, but the investigator still needs to know what questions to ask and where to look.
-- **Non-destructive analysis** is a core principle — always work from a copy of the original image, never the original itself.
-- Deleted files are often recoverable because deleting a file only removes its reference in the file system — the actual data remains on disk until overwritten.
-- This project reinforced real-world incident response skills that are directly applicable to roles in cybersecurity, particularly in **blue team** and **forensics** positions.
+![Run Programs]<img width="771" height="731" alt="Screenshot 2026-05-19 172402" src="https://github.com/user-attachments/assets/ad89f8af-e040-4f32-a7b2-d6d6061c18a5" />
+*Run Programs — 477 prefetch entries including BCWipe and Zenmap executions*
 
 ---
 
-*CSN 150 | New York | Spring 2026*
+## Troubleshooting
+
+**Autopsy 4.23.0 freezes on the splash screen**
+The latest version has stability issues on Windows. Downgrade to 4.21.0 and ignore the update notification when it appears.
+
+![Autopsy frozen]<img width="1151" height="733" alt="Screenshot 2026-05-19 143428" src="https://github.com/user-attachments/assets/70ed994f-ebd6-4a81-baf3-c9a5181e3b53" />
+
+**Autopsy can't open AD1 files**
+AD1 is a proprietary AccessData format. Use FTK Imager to export the contents first, then load the exported folder into Autopsy as Logical Files.
+
+**The zip file is password protected**
+Use the password `cyberdefenders.org` — this is the standard password for all CyberDefenders challenge downloads.
+
+![Password protected]<img width="1029" height="275" alt="Screenshot 2026-05-19 170811" src="https://github.com/user-attachments/assets/73bf25fc-dcfe-48a5-8101-83817cccc7cd" />
+![Properly extracted]<img width="765" height="226" alt="Screenshot 2026-05-19 171226" src="https://github.com/user-attachments/assets/9b0e35b5-7df8-4984-b695-2dbc6f2c6ea6" />
+
+**Wrong file loaded into Autopsy**
+Make sure you select the Hunter file that is 621,327 KB — not the Hunter.ad1 text file that is only 3 KB.
+
+**Data Artifacts panel shows nothing**
+The ingest modules may still be running. Wait for the progress bar at the bottom of Autopsy to finish before checking results.
+
+---
+
+## What I Learned
+
+- Forensics is about telling a story — every artifact (shellbags, prefetch, jump lists, web history) helped piece together a complete picture of what the suspect did and when
+- Not all forensic tools support all image formats — FTK Imager and Autopsy work well together as a pair
+- Deleted files are not truly gone — the suspect deleted files and ran a file shredder, but Autopsy still recovered key evidence from the Recycle Bin
+- The same conclusion can be reached through multiple artifact types, which makes the evidence stronger and harder to dispute
+
+---
+
+*CSN 150 | Spring 2026 | Kimberly Martinez*
