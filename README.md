@@ -87,7 +87,8 @@ Only enable these five:
 - Extension Mismatch Detector
 - Keyword Search
 
-![Ingest modules]<img width="848" height="451" alt="Screenshot 2026-05-19 161850" src="https://github.com/user-attachments/assets/2e74ba4f-d557-4efe-a282-4148a4029cf6" />
+![Ingest modules] <img width="1028" height="650" alt="Screenshot 2026-05-19 162004" src="https://github.com/user-attachments/assets/9cf7ec59-901d-4fc9-8470-0cfdfb5d523d" />
+
 
 ### Step 5 — Wait for processing and explore results
 Once ingest finishes, the left panel will populate with all the artifacts.
