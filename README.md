@@ -19,7 +19,7 @@ The investigation uncovered evidence of network scanning, data exfiltration, Sky
 | Tool | Purpose | Download |
 |------|---------|----------|
 | Autopsy 4.21.0 | Main forensic analysis tool | https://github.com/sleuthkit/autopsy/releases/tag/autopsy-4.21.0 |
-| FTK Imager | Used to open the AD1 disk image | https://www.exterro.com/ftk-product-suite/ftk-imager |
+| FTK Imager | Used to open the AD1 disk image | https://www.exterro.com/thank-you-digital-forensics |
 | CyberDefenders | Source of the Hunter lab image | https://cyberdefenders.org |
 
 > ⚠️ **Use Autopsy 4.21.0 — not 4.23.0.** The latest version freezes on Windows during startup. See the Troubleshooting section for details.
