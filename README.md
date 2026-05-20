@@ -58,20 +58,23 @@ Autopsy cannot open AD1 files directly, so I used FTK Imager to extract the cont
 4. Right-click `[root]` → Export Files → save to a folder called `Hunter-Exported` on your Desktop
 5. Wait for export to finish (662 folders, 6,660 files exported)
 
-![FTK Imager loaded]
-<img width="571" height="731" alt="Screenshot 2026-05-19 171442" src="https://github.com/user-attachments/assets/8fc9dd15-4cc3-430f-b44f-ed6d5ebea300" />
+![FTK Imager loaded] + [File system expanded]
+
+<img width="1150" height="733" alt="Screenshot 2026-05-20 193904" src="https://github.com/user-attachments/assets/108f5682-d687-4c83-b126-3710906e79be" />
 
 
-![File system expanded]<img width="575" height="731" alt="Autopsy Forensics 5" src="https://github.com/user-attachments/assets/516c1942-e1ab-46df-b10b-2aa5366ea517" />
+![Export complete]
 
-![Export complete]<img width="412" height="237" alt="Screenshot 2026-05-19 171804" src="https://github.com/user-attachments/assets/b641dc65-e521-4f7a-8582-3fadbccc2586" />
+<img width="412" height="237" alt="Screenshot 2026-05-19 171804" src="https://github.com/user-attachments/assets/b641dc65-e521-4f7a-8582-3fadbccc2586" />
 
 ### Step 2 — Create a case in Autopsy
 1. Open Autopsy → click New Case
 2. Case Name: `Hunter-Forensics-Lab`
 3. Click Next → enter your name → Finish
 
-![Autopsy welcome screen]<img width="1042" height="663" alt="Screenshot 2026-05-19 160655" src="https://github.com/user-attachments/assets/67e643b8-5abd-48a1-ad87-ec0ec50f39fd" />
+![Autopsy welcome screen]
+
+<img width="1042" height="663" alt="Screenshot 2026-05-19 160655" src="https://github.com/user-attachments/assets/67e643b8-5abd-48a1-ad87-ec0ec50f39fd" />
 
 ### Step 3 — Add the exported folder as a data source
 1. Select **Logical Files** as the data source type
@@ -87,13 +90,18 @@ Only enable these five:
 - Extension Mismatch Detector
 - Keyword Search
 
-![Ingest modules] <img width="1028" height="650" alt="Screenshot 2026-05-19 162004" src="https://github.com/user-attachments/assets/9cf7ec59-901d-4fc9-8470-0cfdfb5d523d" />
+![Ingest modules] 
+
+<img width="1028" height="650" alt="Screenshot 2026-05-19 162004" src="https://github.com/user-attachments/assets/9cf7ec59-901d-4fc9-8470-0cfdfb5d523d" />
 
 
 ### Step 5 — Wait for processing and explore results
 Once ingest finishes, the left panel will populate with all the artifacts.
 
-![Autopsy results loaded]<img width="764" height="724" alt="Screenshot 2026-05-19 172018" src="https://github.com/user-attachments/assets/6356ec50-f0d8-44dd-83f5-0533140e2f41" />
+![Autopsy results loaded]
+
+<img width="1148" height="731" alt="Screenshot 2026-05-20 194026" src="https://github.com/user-attachments/assets/3f1e1cac-52f9-46e4-bb8b-d08cc016e2be" />
+
 
 ---
 
@@ -136,10 +144,16 @@ Once ingest finishes, the left panel will populate with all the artifacts.
 
 ## Investigation Screenshots
 
-![OS Accounts]<img width="773" height="728" alt="Screenshot 2026-05-19 172712" src="https://github.com/user-attachments/assets/0764ce1b-8708-427c-b9af-0dda3d9af136" />
+![OS Accounts]
+
+<img width="1151" height="728" alt="Screenshot 2026-05-20 194210" src="https://github.com/user-attachments/assets/7a34d511-f23d-4af9-9c62-042be9e64ee1" />
+
 *OS Accounts — suspect user Hunter, 3 logins, last login 2016-06-20*
 
-![OS Information]<img width="773" height="728" alt="Screenshot 2026-05-19 172728" src="https://github.com/user-attachments/assets/a4d914bd-832f-4dae-b6cc-ffb47cb85a5d" />
+![OS Information]
+
+<img width="1151" height="733" alt="Screenshot 2026-05-20 194125" src="https://github.com/user-attachments/assets/18999e89-0108-4150-9882-e52d76895120" />
+
 *Operating System Information — computer name 4ORENSICS, Windows 8.1 Enterprise*
 
 ![Recent Documents]<img width="770" height="730" alt="Screenshot 2026-05-19 172134" src="https://github.com/user-attachments/assets/da24069f-fb8d-47ee-8b48-9e3667b18d01" />
