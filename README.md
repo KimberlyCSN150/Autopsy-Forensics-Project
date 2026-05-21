@@ -156,22 +156,28 @@ Once ingest finishes, the left panel will populate with all the artifacts.
 
 *Operating System Information — computer name 4ORENSICS, Windows 8.1 Enterprise*
 
-![Recent Documents]<img width="770" height="730" alt="Screenshot 2026-05-19 172134" src="https://github.com/user-attachments/assets/da24069f-fb8d-47ee-8b48-9e3667b18d01" />
+![Recent Documents]
+
+<img width="1149" height="727" alt="Recent Documents" src="https://github.com/user-attachments/assets/abe912b8-0626-455b-9ecd-a13a16979b47" />
+
 *Recent Documents — Burp Suite JAR, exfiltration diagram, and staged files*
 
-![USB Devices]<img width="770" height="718" alt="Screenshot 2026-05-19 172147" src="https://github.com/user-attachments/assets/176caa7d-87c0-40f7-8427-b422a13c1fe5" />
-*USB Device Attached — two storage drives identified*
+![Web History]
 
-![Shell Bags]<img width="767" height="731" alt="Screenshot 2026-05-19 172159" src="https://github.com/user-attachments/assets/62999271-a42d-4d24-82bb-3999c82394dc" />
-*Shell Bags — suspect browsed to the Exfil staging folder*
+<img width="1147" height="731" alt="Web History" src="https://github.com/user-attachments/assets/610e1fdc-d77b-4b5a-98ee-8e534d1e65ad" />
 
-![Web History]<img width="770" height="728" alt="Screenshot 2026-05-19 172323" src="https://github.com/user-attachments/assets/8e42c720-d7b6-4d02-92c3-6db6fad2311b" />
 *Web History — Skype session and local exfil file access*
 
-![Installed Programs]<img width="772" height="730" alt="Screenshot 2026-05-19 172350" src="https://github.com/user-attachments/assets/b94e8e4e-d55c-4bda-87b2-7dba9e8b5bf2" />
+![Installed Programs]
+
+<img width="1151" height="734" alt="Installed Programs" src="https://github.com/user-attachments/assets/be71e837-5f34-410e-8eed-dabac5362ada" />
+
 *Installed Programs — BCWipe, Crypto Swap, Zenmap 7.12*
 
-![Run Programs]<img width="771" height="731" alt="Screenshot 2026-05-19 172402" src="https://github.com/user-attachments/assets/ad89f8af-e040-4f32-a7b2-d6d6061c18a5" />
+![Run Programs]
+
+<img width="1151" height="730" alt="Run Program" src="https://github.com/user-attachments/assets/bb8ed4b6-3805-4b16-b97a-8df055313668" />
+
 *Run Programs — 477 prefetch entries including BCWipe and Zenmap executions*
 
 ---
